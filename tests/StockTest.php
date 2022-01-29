@@ -2,6 +2,7 @@
 
 namespace App\Tests;
 
+use App\Entity\Stock;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -10,16 +11,21 @@ class StockTest extends KernelTestCase {
     /** @var EntityManagerInterface */
     private $entityManager;
 
-    protected function setUp() : void{
+    protected function setUp() : void {
         $kernel = self::bootKernel();
+
         DatabasePrimer::prime($kernel);
+
         $this->entityManager = $kernel->getContainer()->get('doctrine')->getManager();
     }
 
-    /** @test */
-    public function a_stock_record_can_be_created_in_the_database(){
 
-        // SET UP
+    /** @test */
+    public function a_stock_record_can_be_created_in_the_database() {
+
+        // Set up
+
+        // Stock
         $stock = new Stock();
         $stock->setSymbol('AMZN');
         $stock->setShortName('Amazon Inc');
@@ -33,20 +39,23 @@ class StockTest extends KernelTestCase {
         $stock->setPreviousClose($previousClose);
         $stock->setPriceChange($priceChange);
 
-        // DO SOMETHING
-        $this->entityManager->flush();
-        $stockRepository = $this->entityManager->getRepository(Stock::class);
-        $stockRecord = $stockRepository->findOneBy(['symbol' => ' AMZN']);
+        $this->entityManager->persist($stock);
 
-        // MAKE ASSERTIONS
+        // Do something
+        $this->entityManager->flush();
+
+        $stockRepository = $this->entityManager->getRepository(Stock::class);
+
+        $stockRecord = $stockRepository->findOneBy(['symbol' => 'AMZN']);
+
+        // Make assertions
         $this->assertEquals('Amazon Inc', $stockRecord->getShortName());
         $this->assertEquals('USD', $stockRecord->getCurrency());
         $this->assertEquals('Nasdaq', $stockRecord->getExchangeName());
         $this->assertEquals('US', $stockRecord->getRegion());
-        $this->assertEquals('1000', $stockRecord->getPrice());
-        $this->assertEquals('1100', $stockRecord->getPreviousClose());
-        $this->assertEquals('-100', $stockRecord->getPriceChange());
-
+        $this->assertEquals(1000, $stockRecord->getPrice());
+        $this->assertEquals(1100, $stockRecord->getPreviousClose());
+        $this->assertEquals(-100, $stockRecord->getPriceChange());
     }
 
 }
