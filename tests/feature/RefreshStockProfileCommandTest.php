@@ -32,7 +32,7 @@ class RefreshStockProfileCommandTest extends KernelTestCase
     }
 
     /** @test */
-    public function the_refresh_stock_profile_command_behaves_correctly()
+    public function the_refresh_stock_profile_command_behaves_correctly_when_a_stock_record_does_not_exist()
     {
         // Set up
         $application = new Application(self::$kernel);
