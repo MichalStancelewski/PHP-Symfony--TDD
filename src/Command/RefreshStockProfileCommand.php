@@ -12,13 +12,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RefreshStockProfileCommand extends Command
 {
-    protected  static $defaultName = 'app:refresh-stock-profile';
+    protected static $defaultName = 'app:refresh-stock-profile';
     private EntityManagerInterface $entityManager;
     private YahooFinanceApiClient $yahooFinanceApiClient;
 
     public function __construct(EntityManagerInterface $entityManager, YahooFinanceApiClient $yahooFinanceApiClient)
     {
-        $this->entityManager = $entityManager;
 
         parent::__construct();
         $this->entityManager = $entityManager;
@@ -31,8 +30,7 @@ class RefreshStockProfileCommand extends Command
         $this
             ->setDescription('Retrieve a stock profile from Yahoo Finance API. Update the record in the DB')
             ->addArgument('symbol', InputArgument::REQUIRED, 'Stock symbol, e.g. AMZN for Amazon')
-            ->addArgument('region', InputArgument::REQUIRED, 'The region of the company, e.g. US for United States')
-        ;
+            ->addArgument('region', InputArgument::REQUIRED, 'The region of the company, e.g. US for United States');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -41,8 +39,13 @@ class RefreshStockProfileCommand extends Command
             $input->getArgument('symbol'), $input->getArgument('region')
         );
 
+        if ($stockProfile['statusCode'] !== 200) {
 
-        $stock = new Stock();
+        }
+
+        $stock = $this->serializer->deserialize($stockProfile['content'], Stock::class, 'json');
+
+        /*$stock = new Stock();
         $stock->setSymbol($stockProfile->symbol);
         $stock->setShortName($stockProfile->shortName);
         $stock->setCurrency($stockProfile->currency);
@@ -52,7 +55,7 @@ class RefreshStockProfileCommand extends Command
         $stock->setPreviousClose($stockProfile->previousClose);
         $priceChange = $stockProfile->price - $stockProfile->previousClose;
         $stock->setPriceChange($priceChange);
-
+*/
         $this->entityManager->persist($stock);
         $this->entityManager->flush();
 
