@@ -31,18 +31,26 @@ class YahooFinanceApiClient
             ]
         ]);
 
+        if ($response->getStatusCode() !== 200) {
+            // @todo
+        }
+
+        $stockProfile = json_decode($response->getContent())->price;
+
+        $stockProfileAsArray = [
+            'symbol' => $stockProfile->symbol,
+            'shortName' => $stockProfile->shortName,
+            'region' => $region,
+            'exchangeName' => $stockProfile->exchangeName,
+            'currency' => $stockProfile->currency,
+            'price' => $stockProfile->regularMarketPrice->raw,
+            'previousChange' => $stockProfile->regularMarketPreviousClose->raw,
+            'priceChange' => $stockProfile->regularMarketPrice->raw - $stockProfile->regularMarketPreviousClose->raw
+        ];
+
         return [
             'statusCode' => 200,
-            'content' => json_encode([
-                'symbol' => 'AMZN',
-                'shortName' => 'Amazon.com, Inc.',
-                'region' => 'US',
-                'exchangeName' => 'NasdaqGS',
-                'currency' => 'USD',
-                'price' => 100.50,
-                'previousChange' => 110.20,
-                'priceChange' => -9.70
-            ])
+            'content' => json_encode($stockProfileAsArray)
         ];
     }
 }

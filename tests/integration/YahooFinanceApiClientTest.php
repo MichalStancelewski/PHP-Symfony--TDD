@@ -15,7 +15,7 @@ class YahooFinanceApiClientTest extends DatabaseDependantTestCase
         // Set up
         $yahooFinanceApiClient = self::$kernel->getContainer()->get('yahoo-finance-api-client');
 
-        // Do
+        // Do something
         $response = $yahooFinanceApiClient->fetchStockProfile('AMZN', 'US');
 
         $stockProfile = json_decode($response['content']);
