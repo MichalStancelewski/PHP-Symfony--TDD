@@ -353,6 +353,12 @@
     "symfony/polyfill-php81": {
         "version": "v1.24.0"
     },
+    "symfony/property-access": {
+        "version": "v5.3.14"
+    },
+    "symfony/property-info": {
+        "version": "v5.3.14"
+    },
     "symfony/proxy-manager-bridge": {
         "version": "v5.2.12"
     },
@@ -369,6 +375,9 @@
             "./config/packages/routing.yaml",
             "./config/routes.yaml"
         ]
+    },
+    "symfony/serializer": {
+        "version": "v5.3.14"
     },
     "symfony/service-contracts": {
         "version": "v2.5.0"
