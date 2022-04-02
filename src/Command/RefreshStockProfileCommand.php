@@ -49,18 +49,7 @@ class RefreshStockProfileCommand extends Command
         }
 
         $stock = $this->serializer->deserialize($stockProfile['content'], Stock::class, 'json');
-
-        /*$stock = new Stock();
-        $stock->setSymbol($stockProfile->symbol);
-        $stock->setShortName($stockProfile->shortName);
-        $stock->setCurrency($stockProfile->currency);
-        $stock->setExchangeName($stockProfile->exchangeName);
-        $stock->setRegion($stockProfile->region);
-        $stock->setPrice($stockProfile->price);
-        $stock->setPreviousClose($stockProfile->previousClose);
-        $priceChange = $stockProfile->price - $stockProfile->previousClose;
-        $stock->setPriceChange($priceChange);
-*/
+        
         $this->entityManager->persist($stock);
         $this->entityManager->flush();
 
