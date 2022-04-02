@@ -37,8 +37,8 @@ class RefreshStockProfileCommandTest extends DatabaseDependantTestCase
         $this->assertSame('AMZN', $stock->getSymbol());
         $this->assertSame('Amazon.com, Inc.', $stock->getShortName());
         $this->assertSame('US', $stock->getRegion());
-        $this->assertGreaterThan('50', $stock->getPreviousClose());
-        $this->assertGreaterThan('50', $stock->getPrice());
+        $this->assertGreaterThan('0', $stock->getPreviousClose());
+        $this->assertGreaterThan('0', $stock->getPrice());
     }
 
 

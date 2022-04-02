@@ -44,7 +44,7 @@ class YahooFinanceApiClient
             'exchangeName' => $stockProfile->exchangeName,
             'currency' => $stockProfile->currency,
             'price' => $stockProfile->regularMarketPrice->raw,
-            'previousChange' => $stockProfile->regularMarketPreviousClose->raw,
+            'previousClose' => $stockProfile->regularMarketPreviousClose->raw,
             'priceChange' => $stockProfile->regularMarketPrice->raw - $stockProfile->regularMarketPreviousClose->raw
         ];
 

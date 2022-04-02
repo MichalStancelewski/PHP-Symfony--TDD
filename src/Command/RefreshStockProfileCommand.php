@@ -9,19 +9,24 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class RefreshStockProfileCommand extends Command
 {
     protected static $defaultName = 'app:refresh-stock-profile';
     private EntityManagerInterface $entityManager;
     private YahooFinanceApiClient $yahooFinanceApiClient;
+    private SerializerInterface $serializer;
 
-    public function __construct(EntityManagerInterface $entityManager, YahooFinanceApiClient $yahooFinanceApiClient)
+    public function __construct(EntityManagerInterface $entityManager,
+                                YahooFinanceApiClient $yahooFinanceApiClient,
+                                SerializerInterface $serializer)
     {
 
         parent::__construct();
         $this->entityManager = $entityManager;
         $this->yahooFinanceApiClient = $yahooFinanceApiClient;
+        $this->serializer = $serializer;
     }
 
 
