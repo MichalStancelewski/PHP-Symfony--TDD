@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\Stock;
+use App\Http\FinanceApiClientInterface;
 use App\Http\YahooFinanceApiClient;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
@@ -15,17 +16,17 @@ class RefreshStockProfileCommand extends Command
 {
     protected static $defaultName = 'app:refresh-stock-profile';
     private EntityManagerInterface $entityManager;
-    private YahooFinanceApiClient $yahooFinanceApiClient;
+    private FinanceApiClientInterface $financeApiClient;
     private SerializerInterface $serializer;
 
-    public function __construct(EntityManagerInterface $entityManager,
-                                YahooFinanceApiClient $yahooFinanceApiClient,
-                                SerializerInterface $serializer)
+    public function __construct(EntityManagerInterface    $entityManager,
+                                FinanceApiClientInterface $financeApiClient,
+                                SerializerInterface       $serializer)
     {
 
         parent::__construct();
         $this->entityManager = $entityManager;
-        $this->yahooFinanceApiClient = $yahooFinanceApiClient;
+        $this->financeApiClient = $financeApiClient;
         $this->serializer = $serializer;
     }
 
@@ -40,7 +41,7 @@ class RefreshStockProfileCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $stockProfile = $this->yahooFinanceApiClient->fetchStockProfile(
+        $stockProfile = $this->financeApiClient->fetchStockProfile(
             $input->getArgument('symbol'), $input->getArgument('region')
         );
 
@@ -49,7 +50,7 @@ class RefreshStockProfileCommand extends Command
         }
 
         $stock = $this->serializer->deserialize($stockProfile['content'], Stock::class, 'json');
-        
+
         $this->entityManager->persist($stock);
         $this->entityManager->flush();
 
