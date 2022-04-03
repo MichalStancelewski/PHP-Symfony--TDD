@@ -45,11 +45,11 @@ class RefreshStockProfileCommand extends Command
             $input->getArgument('symbol'), $input->getArgument('region')
         );
 
-        if ($stockProfile['statusCode'] !== 200) {
+        if ($stockProfile->getStatusCode() !== 200) {
 
         }
 
-        $stock = $this->serializer->deserialize($stockProfile['content'], Stock::class, 'json');
+        $stock = $this->serializer->deserialize($stockProfile->getContent(), Stock::class, 'json');
 
         $this->entityManager->persist($stock);
         $this->entityManager->flush();
