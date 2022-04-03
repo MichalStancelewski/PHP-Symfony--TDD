@@ -46,7 +46,7 @@ class RefreshStockProfileCommand extends Command
         );
 
         if ($stockProfile->getStatusCode() !== 200) {
-
+            return Command::FAILURE;
         }
 
         $stock = $this->serializer->deserialize($stockProfile->getContent(), Stock::class, 'json');

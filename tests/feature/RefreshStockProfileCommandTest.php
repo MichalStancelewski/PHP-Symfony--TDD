@@ -45,5 +45,39 @@ class RefreshStockProfileCommandTest extends DatabaseDependantTestCase
         $this->assertGreaterThan('0', $stock->getPrice());
     }
 
+    /** @test */
+    public function non_200_status_code_responses_are_handled_correctly()
+    {
+        // Set up
+        $application = new Application(self::$kernel);
+
+        //Command -> symfony console make:command
+        $command = $application->find('app:refresh-stock-profile');
+
+        $commandTester = new CommandTester($command);
+
+        // non-200 response
+        FakeYahooFinanceApiClient::$statusCode = 500;
+
+        FakeYahooFinanceApiClient::$content = 'Finance API client - ERROR';
+
+        // Do something
+        $commandStatus = $commandTester->execute([
+            'symbol' => 'AMZN',
+            'region' => 'US'
+        ]);
+
+        $repo = $this->entityManager->getRepository(Stock::class);
+
+        $stockRecordCount = $repo->createQueryBuilder('stock')
+            ->select('count(stock.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        // Make assertions
+        $this->assertEquals(1, $commandStatus);
+        $this->assertEquals(0, $stockRecordCount);
+
+    }
 
 }
