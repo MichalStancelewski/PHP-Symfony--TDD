@@ -3,6 +3,7 @@
 namespace App\Tests\feature;
 
 use App\Entity\Stock;
+use App\Http\FakeYahooFinanceApiClient;
 use App\Tests\DatabaseDependantTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -19,6 +20,9 @@ class RefreshStockProfileCommandTest extends DatabaseDependantTestCase
         $command = $application->find('app:refresh-stock-profile');
 
         $commandTester = new CommandTester($command);
+
+        // Set faked return content
+        FakeYahooFinanceApiClient::$content = '{"symbol":"AMZN","shortName":"Amazon.com, Inc.","region":"US","exchangeName":"NasdaqGS","currency":"USD","price":3271.2,"previousClose":3259.95,"priceChange":11.25}';
 
         // Do something
         $commandTester->execute([
