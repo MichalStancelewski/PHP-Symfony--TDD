@@ -19,8 +19,4 @@
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 
-/postgres/*
-/postgres/*~
-postgres/*
-/postgres/
 postgres/
