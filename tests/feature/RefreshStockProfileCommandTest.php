@@ -43,6 +43,7 @@ class RefreshStockProfileCommandTest extends DatabaseDependantTestCase
         $this->assertSame('US', $stock->getRegion());
         $this->assertGreaterThan('0', $stock->getPreviousClose());
         $this->assertGreaterThan('0', $stock->getPrice());
+        $this->assertStringContainsString('Amazon.com, Inc. has been saved / updated.',$commandTester->getDisplay());
     }
 
     /** @test */
@@ -77,7 +78,7 @@ class RefreshStockProfileCommandTest extends DatabaseDependantTestCase
         // Make assertions
         $this->assertEquals(1, $commandStatus);
         $this->assertEquals(0, $stockRecordCount);
-
+        $this->assertStringContainsString('Finance API client - ERROR',$commandTester->getDisplay());
     }
 
 }
