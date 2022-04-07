@@ -32,9 +32,9 @@ class YahooFinanceApiClient implements FinanceApiClientInterface
             ]
         ]);
 
-        if ($response->getStatusCode() !== 200) {
+       /* if ($response->getStatusCode() !== 200) {
             return new JsonResponse('Finance API client - ERROR ', 400);
-        }
+        }*/
 
         $stockProfile = json_decode($response->getContent())->price;
 
